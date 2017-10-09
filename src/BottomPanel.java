@@ -16,13 +16,14 @@ public class BottomPanel extends JPanel implements IView {
 			
 			// set the model
 			model = model_;
-			label.setText("lines");
+			model.addView(this);
+			label.setText("0 lines");
 			this.add(this.label);
 		}
 
 		@Override
 		public void updateView() {
 			// TODO Auto-generated method stub
-			this.label.setText("test");
+			this.label.setText(model.getLineCount() + " lines");
 		}
 }

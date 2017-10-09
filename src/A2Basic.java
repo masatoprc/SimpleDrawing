@@ -13,10 +13,10 @@ public class A2Basic {
 		bottomPanel.setPreferredSize(new Dimension(bottomPanel.getWidth(), 30));
 		TopPanel topPanel = new TopPanel(model_);
 		topPanel.setPreferredSize(new Dimension(topPanel.getWidth(), 40));
-		BottomPanel westPanel = new BottomPanel(model_);
+		ColorPallete westPanel = new ColorPallete(model_);
 		westPanel.setPreferredSize(new Dimension(80, westPanel.getHeight()));
 		
-		Canvas panel = new Canvas();
+		Canvas panel = new Canvas(model_);
         panel.setPreferredSize(new Dimension(780, 480));
         JScrollPane scroll = new JScrollPane(panel);
 		
