@@ -6,10 +6,12 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-public class TopPanel extends JPanel implements IView {
+public class TopPanelEnhanced extends JPanel implements IView {
 	
 	private DrawingModel model;
 	private JSlider scaleSlider = new JSlider(5, 20);
@@ -18,8 +20,12 @@ public class TopPanel extends JPanel implements IView {
 	JLabel rotateLabel = new JLabel("0");
 	JButton deleteButton = new JButton("DELETE");
 	JButton duplicateButton = new JButton("DUPLICATE");
+	// The spinner requires a number model that specifies the starting
+	// value, the minimum, maximum, and step size.
+	private JSpinner thickSpinner = new JSpinner(new SpinnerNumberModel(2, 1,
+			4, 1));
 
-	public TopPanel(DrawingModel model_) {
+	public TopPanelEnhanced(DrawingModel model_) {
 		super();
 		// set the model
 		model = model_;
@@ -34,6 +40,8 @@ public class TopPanel extends JPanel implements IView {
 		this.add(new JLabel("Rotate:"));
 		this.add(rotateSlider);
 		this.add(rotateLabel);
+		this.add(new JLabel("Thickness:"));
+		this.add(thickSpinner);
 	}
 
 	@Override
@@ -44,15 +52,18 @@ public class TopPanel extends JPanel implements IView {
 			rotateSlider.setEnabled(false);
 			deleteButton.setEnabled(false);
 			duplicateButton.setEnabled(false);
+			thickSpinner.setEnabled(false);
 			rotateSlider.setValue(0);
 			scaleSlider.setValue(10);
+			thickSpinner.setValue(2);
 		} else {
 			scaleSlider.setEnabled(true);
 			rotateSlider.setEnabled(true);
 			deleteButton.setEnabled(true);
 			duplicateButton.setEnabled(true);
+			thickSpinner.setEnabled(true);
 			rotateSlider.setValue(model.getShapeRotation(curStrokeID));
-			scaleSlider.setValue(((Double)(model.getShapeScale(curStrokeID) * 10)).intValue());
+			thickSpinner.setValue(model.getShapeThick(curStrokeID));
 		}
 	}
 
@@ -67,6 +78,13 @@ public class TopPanel extends JPanel implements IView {
 		this.duplicateButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				model.duplicateStroke();
+			}
+		});
+		this.thickSpinner.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				JSpinner src = (JSpinner) e.getSource();
+				int val = (int) src.getValue();
+				model.changeThickness(val);
 			}
 		});
 	}

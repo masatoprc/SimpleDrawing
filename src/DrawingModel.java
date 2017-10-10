@@ -6,7 +6,7 @@ import java.util.List;
 import javax.vecmath.Point2d;
 
 public class DrawingModel implements DeleteCallback, DuplicateCallback
-   , ScaleSlideCallback, RotateSlideCallback {
+   , ScaleSlideCallback, RotateSlideCallback, ThicknessCallback {
 	public static Color[] colorArray = new Color[10];
 	private int curColorIndex;
 	private List<Shape> shapes = new ArrayList<>();
@@ -97,6 +97,33 @@ public class DrawingModel implements DeleteCallback, DuplicateCallback
 		}		
 	}
 	
+	public int getShapeRotation(int id) {
+		for (int i = 0; i < shapes.size(); i++) {
+			if (id == shapes.get(i).getID()) {
+				return shapes.get(i).prevRotation.intValue();
+			}
+		}
+		return 0;
+	}
+	
+	public int getShapeThick(int id) {
+		for (int i = 0; i < shapes.size(); i++) {
+			if (id == shapes.get(i).getID()) {
+				return (int) shapes.get(i).getStrokeThickness();
+			}
+		}
+		return 2;
+	}
+	
+	public Double getShapeScale(int id) {
+		for (int i = 0; i < shapes.size(); i++) {
+			if (id == shapes.get(i).getID()) {
+				return shapes.get(i).scale;
+			}
+		}
+		return 1d;
+	}
+	
 	public void setCanvas(Canvas canvas_) {
 		canvas = canvas_;
 	}
@@ -133,6 +160,7 @@ public class DrawingModel implements DeleteCallback, DuplicateCallback
 	public void modifyScale(double scale) {
 		for (int i = 0; i < shapes.size(); i++) {
 			if (shapes.get(i).getID() == curSelectedStrokeID) {
+				shapes.get(i).scale = scale;
 				AffineTransform T = (AffineTransform) shapes.get(i).getTransform();
 				Point2d center = shapes.get(i).centerBoundingBox();
 				//System.out.println("center" + center.x + " " + center.y);
@@ -160,6 +188,17 @@ public class DrawingModel implements DeleteCallback, DuplicateCallback
 				T.rotate(Math.toRadians(degree - prevRotation), center.x, center.y);
 				shapes.get(i).prevRotation = degree;
                 shapes.get(i).setTransform(T);
+				break;
+			}
+		}
+		updateAllViews();
+	}
+
+	@Override
+	public void changeThickness(int val) {
+		for (int i = 0; i < shapes.size(); i++) {
+			if (shapes.get(i).getID() == curSelectedStrokeID) {
+				shapes.get(i).setStrokeThickness(val);
 				break;
 			}
 		}

@@ -42,6 +42,7 @@ class Shape {
     Double prevRotation = 0d;
     int prevX = -1;
     int prevY = -1;
+    double scale = 1d;
 	
     public void setID(int id_) {
     	id = id_;
