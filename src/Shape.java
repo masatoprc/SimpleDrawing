@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.awt.Color;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
 
 import javax.vecmath.*;
@@ -17,6 +18,38 @@ class Shape {
 
     // shape points
     ArrayList<Point2d> points;
+    @SuppressWarnings("unchecked")
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+		Shape clone = new Shape();
+		clone.id = id;
+		clone.points = (ArrayList<Point2d>) points.clone();
+		clone.isClosed = isClosed;
+		clone.isFilled = isFilled;
+		clone.npoints = npoints;
+		clone.pointsChanged = pointsChanged;
+		clone.xpoints = xpoints.clone();
+		clone.ypoints = ypoints.clone();
+		clone.transform = transform;
+		clone.colour = colour;
+		clone.strokeThickness = strokeThickness;
+		clone.prevRotation = prevRotation;
+		return clone;
+	}
+
+
+	int id;
+    Double prevRotation = 0d;
+    int prevX = -1;
+    int prevY = -1;
+	
+    public void setID(int id_) {
+    	id = id_;
+    }
+    
+    public int getID() {
+    	return id;
+    }
 
     public void clearPoints() {
         points = new ArrayList<Point2d>();
@@ -149,12 +182,69 @@ class Shape {
     // a work to shape transform as an extra parater to this function
     public boolean hittest(double x, double y)
     {   
-    	if (points != null) {
-
-            // TODO Implement
-
-    	}
-    	
+    	Point2d clickPoint = new Point2d(x, y);
+    	Point2D p;
+		try {
+			p = transform.inverseTransform(new Point2D.Double(x, y), null);
+	    	clickPoint.x = p.getX();
+	    	clickPoint.y = p.getY();
+	    	if (points != null) {
+	    		for (int i = 0; i < points.size() - 1; i++) {
+	    			Point2d closest = closestPoint(clickPoint, points.get(i), points.get(i+1));
+	    			if (Math.sqrt(Math.pow(closest.x - p.getX(), 2) + Math.pow(closest.y - p.getY(), 2)) <= 5) {
+	            		return true;
+	            	}
+	    		}
+	        }    	
+		} catch (NoninvertibleTransformException e) {
+			System.out.println("non invertible transformation");
+		}
     	return false;
+    }
+    
+    public Point2d centerBoundingBox() {
+    	Point2d center = new Point2d();
+    	double largestY = 0;
+    	double largestX = 0;
+    	double smallestX = Integer.MAX_VALUE;
+    	double smallestY = Integer.MAX_VALUE;
+    	for (Point2d point : points) {
+    		smallestX = Math.min(smallestX, point.x);
+    		smallestY = Math.min(smallestY, point.y);
+    		largestX = Math.max(largestX, point.x);
+    		largestY = Math.max(largestY, point.y);
+    	}
+    	center.x = (smallestX + largestX) / 2;
+    	center.y = (smallestY + largestY) / 2;
+    	return center;
+    }
+    
+    // find closest point using projection method 
+    static Point2d closestPoint(Point2d M, Point2d P0, Point2d P1) {
+    	Vector2d v = new Vector2d();
+    	v.sub(P1,P0); // v = P2 - P1
+    	
+    	// early out if line is less than 1 pixel long
+    	if (v.lengthSquared() < 0.5)
+    		return P0;
+    	
+    	Vector2d u = new Vector2d();
+    	u.sub(M,P0); // u = M - P1
+
+    	// scalar of vector projection ...
+    	double s = u.dot(v) / v.dot(v); 
+    	
+    	// find point for constrained line segment
+    	if (s < 0) 
+    		return P0;
+    	else if (s > 1)
+    		return P1;
+    	else {
+    		Point2d I = P0;
+        	Vector2d w = new Vector2d();
+        	w.scale(s, v); // w = s * v
+    		I.add(w); // I = P1 + w
+    		return I;
+    	}
     }
 }

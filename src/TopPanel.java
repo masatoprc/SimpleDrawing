@@ -1,6 +1,8 @@
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -16,23 +18,18 @@ public class TopPanel extends JPanel implements IView {
 	private JSlider rotateSlider = new JSlider(-180, 180);
 	JLabel scaleLabel = new JLabel("1.0");
 	JLabel rotateLabel = new JLabel("0");
+	JButton deleteButton = new JButton("DELETE");
+	JButton duplicateButton = new JButton("DUPLICATE");
 
 	public TopPanel(DrawingModel model_) {
 		super();
 		// set the model
 		model = model_;
+		model.addView(this);
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
 		this.registerControllers();
-		// create a constraints object
-//		GridBagConstraints gc = new GridBagConstraints();
-//		// stretch the widget horizontally and vertically
-//		gc.fill = GridBagConstraints.HORIZONTAL;
-//		gc.gridwidth = 1; // 1 grid cell wide
-//		gc.gridheight = 1; // 1 grid cells tall
-//		gc.weightx = 0.15; // the proportion of space to give this column
-//		gc.weighty = 0.8; // the proportion of space to give this row
-		this.add(new JButton("DUPLICATE"));
-		this.add(new JButton("DELETE"));
+		this.add(duplicateButton);
+		this.add(deleteButton);
 		this.add(new JLabel("Scale:"));
 		this.add(scaleSlider);		
 		this.add(scaleLabel);
@@ -43,20 +40,40 @@ public class TopPanel extends JPanel implements IView {
 
 	@Override
 	public void updateView() {
-		// TODO Auto-generated method stub
-		
+		int curStrokeID = model.getCurSelectedStrokeID();
+		if (curStrokeID == -1) {
+			scaleSlider.setEnabled(false);
+			rotateSlider.setEnabled(false);
+			deleteButton.setEnabled(false);
+			duplicateButton.setEnabled(false);
+		} else {
+			scaleSlider.setEnabled(true);
+			rotateSlider.setEnabled(true);
+			deleteButton.setEnabled(true);
+			duplicateButton.setEnabled(true);
+		}
 	}
 
 	private void registerControllers() {
 		this.scaleSlider.addChangeListener(new ScaleController());
 		this.rotateSlider.addChangeListener(new RotateController());
+		this.deleteButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				model.deleteStroke();
+			}
+		});
+		this.duplicateButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				model.duplicateStroke();
+			}
+		});
 	}
 
 	private class ScaleController implements ChangeListener {
 		public void stateChanged(ChangeEvent e) {
 			double scale = scaleSlider.getValue();
 			scaleLabel.setText(String.valueOf(scale / 10.0));
-			//model.setBase(base);
+			model.modifyScale(scale / 10.0);
 		}
 	}
 
@@ -64,7 +81,7 @@ public class TopPanel extends JPanel implements IView {
 		public void stateChanged(ChangeEvent e) {
 			double rotation = rotateSlider.getValue();
 			rotateLabel.setText(String.valueOf(rotation));
-			//model.setHeight(height);
+			model.modifyRotation(rotation);
 		}
 	}
 }

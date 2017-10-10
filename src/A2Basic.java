@@ -17,6 +17,7 @@ public class A2Basic {
 		westPanel.setPreferredSize(new Dimension(80, westPanel.getHeight()));
 		
 		Canvas panel = new Canvas(model_);
+		model_.setCanvas(panel);
         panel.setPreferredSize(new Dimension(780, 480));
         JScrollPane scroll = new JScrollPane(panel);
 		
