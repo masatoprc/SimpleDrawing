@@ -135,12 +135,15 @@ public class DrawingModel implements DeleteCallback, DuplicateCallback
 			if (shapes.get(i).getID() == curSelectedStrokeID) {
 				AffineTransform T = (AffineTransform) shapes.get(i).getTransform();
 				Point2d center = shapes.get(i).centerBoundingBox();
-				//System.out.println(T.getTranslateX() + " " + T.getTranslateY());
-				T.concatenate(AffineTransform.getTranslateInstance(-center.x,-center.y));
+				//System.out.println("center" + center.x + " " + center.y);
+				shapes.get(i).manualTranslate((int) -center.x, (int)-center.y);
+				//T.concatenate(AffineTransform.getTranslateInstance(-center.x,-center.y));
 				T.concatenate(AffineTransform.getScaleInstance(1 / T.getScaleX(), 1 / T.getScaleY()));
-				T.concatenate(AffineTransform.getScaleInstance(scale, scale));
-				T.concatenate(AffineTransform.getTranslateInstance(center.x, center.y));
+			    T.concatenate(AffineTransform.getScaleInstance(scale, scale));
+				//T.concatenate(AffineTransform.getTranslateInstance(center.x, center.y));
+				
                 shapes.get(i).setTransform(T);
+                shapes.get(i).manualTranslate((int) center.x, (int)center.y);
 				break;
 			}
 		}

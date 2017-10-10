@@ -247,4 +247,12 @@ class Shape {
     		return I;
     	}
     }
+    
+    public void manualTranslate(int x_, int y_) {
+    	for (Point2d point : points) {
+    		point.setX(point.getX() + x_);
+    		point.setY(point.getY() + y_);
+    	}
+    	pointsChanged = true;
+    }
 }

@@ -46,6 +46,8 @@ public class TopPanel extends JPanel implements IView {
 			rotateSlider.setEnabled(false);
 			deleteButton.setEnabled(false);
 			duplicateButton.setEnabled(false);
+			rotateSlider.setValue(0);
+			scaleSlider.setValue(10);
 		} else {
 			scaleSlider.setEnabled(true);
 			rotateSlider.setEnabled(true);
