@@ -69,9 +69,13 @@ public class Canvas extends JPanel implements IView, DeleteCallback, DuplicateCa
 			    		curSelectedShape.prevY = e.getY();
 			    	} else {
 			    		AffineTransform T = curSelectedShape.getTransform();
+			    		double unrotatedX = (e.getX() - curSelectedShape.prevX) / curSelectedShape.scale;
+			    		double unrotatedY = (e.getY() - curSelectedShape.prevY) / curSelectedShape.scale;
 			    		T.concatenate(AffineTransform.getTranslateInstance(
-			    				e.getX() - curSelectedShape.prevX, 
-			    				e.getY() - curSelectedShape.prevY));
+			    				Math.cos(Math.toRadians(-curSelectedShape.prevRotation))*unrotatedX - 
+			    				Math.sin(Math.toRadians(-curSelectedShape.prevRotation))*unrotatedY, 
+			    				Math.sin(Math.toRadians(-curSelectedShape.prevRotation))*unrotatedX + 
+			    				Math.cos(Math.toRadians(-curSelectedShape.prevRotation))*unrotatedY));
 		                curSelectedShape.setTransform(T);
 		                curSelectedShape.prevX = e.getX();
 			    		curSelectedShape.prevY = e.getY();

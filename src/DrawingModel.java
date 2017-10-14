@@ -22,6 +22,15 @@ public class DrawingModel implements DeleteCallback, DuplicateCallback
 	public int getCurSelectedStrokeID() {
 		return curSelectedStrokeID;
 	}
+	
+	public Shape getCurSelectedStroke() {
+		for (int i = 0; i < shapes.size(); i++) {
+			if (shapes.get(i).getID() == curSelectedStrokeID) {
+				return shapes.get(i);
+			}
+		}
+		return null;
+	}
 
 	public DrawingModel() {
 		super();
@@ -163,15 +172,12 @@ public class DrawingModel implements DeleteCallback, DuplicateCallback
 				shapes.get(i).scale = scale;
 				AffineTransform T = (AffineTransform) shapes.get(i).getTransform();
 				Point2d center = shapes.get(i).centerBoundingBox();
-				//System.out.println("center" + center.x + " " + center.y);
-				shapes.get(i).manualTranslate((int) -center.x, (int)-center.y);
-				//T.concatenate(AffineTransform.getTranslateInstance(-center.x,-center.y));
-				T.concatenate(AffineTransform.getScaleInstance(1 / T.getScaleX(), 1 / T.getScaleY()));
-			    T.concatenate(AffineTransform.getScaleInstance(scale, scale));
-				//T.concatenate(AffineTransform.getTranslateInstance(center.x, center.y));
-				
+				double temp1 = 1 / T.getScaleX(); Double temp2 = 1 / T.getScaleY();
+				T.concatenate(AffineTransform.getTranslateInstance(center.x, center.y));
+				T.concatenate(AffineTransform.getScaleInstance(scale, scale));
+				T.concatenate(AffineTransform.getScaleInstance(temp1, temp2));
+				T.concatenate(AffineTransform.getTranslateInstance(-center.x,-center.y));				
                 shapes.get(i).setTransform(T);
-                shapes.get(i).manualTranslate((int) center.x, (int)center.y);
 				break;
 			}
 		}

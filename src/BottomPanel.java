@@ -23,7 +23,13 @@ public class BottomPanel extends JPanel implements IView {
 
 		@Override
 		public void updateView() {
-			// TODO Auto-generated method stub
-			this.label.setText(model.getLineCount() + " lines");
+			Shape curShape = model.getCurSelectedStroke();
+			if (curShape != null) { 
+				this.label.setText(model.getLineCount() + " Strokes, Selection ("
+						+ curShape.npoints + " points, scale: " + curShape.scale + 
+						", rotation " + curShape.prevRotation + ")");
+			} else {
+				this.label.setText(model.getLineCount() + " Strokes");
+			}			
 		}
 }

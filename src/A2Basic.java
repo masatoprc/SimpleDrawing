@@ -18,7 +18,7 @@ public class A2Basic {
 		
 		Canvas panel = new Canvas(model_);
 		model_.setCanvas(panel);
-        panel.setPreferredSize(new Dimension(780, 480));
+        panel.setPreferredSize(new Dimension(680, 480));
         JScrollPane scroll = new JScrollPane(panel);
 		
 	    JFrame frame = new JFrame("SimpleDrawing");
@@ -28,7 +28,7 @@ public class A2Basic {
 	    frame.getContentPane().add(westPanel, BorderLayout.WEST);
 	    frame.getContentPane().add(scroll, BorderLayout.CENTER);
 	    
-	    frame.setPreferredSize(new Dimension(900,600));
+	    frame.setPreferredSize(new Dimension(800,600));
 	    frame.pack();
 	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    frame.setVisible(true);

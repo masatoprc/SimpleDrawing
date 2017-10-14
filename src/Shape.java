@@ -34,6 +34,7 @@ class Shape {
 		clone.colour = colour;
 		clone.strokeThickness = strokeThickness;
 		clone.prevRotation = prevRotation;
+		clone.scale = scale;
 		return clone;
 	}
 
