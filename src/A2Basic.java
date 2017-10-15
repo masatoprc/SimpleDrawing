@@ -13,19 +13,19 @@ public class A2Basic {
 		bottomPanel.setPreferredSize(new Dimension(bottomPanel.getWidth(), 30));
 		TopPanel topPanel = new TopPanel(model_);
 		topPanel.setPreferredSize(new Dimension(topPanel.getWidth(), 40));
-		ColorPallete westPanel = new ColorPallete(model_);
-		westPanel.setPreferredSize(new Dimension(80, westPanel.getHeight()));
+		//ColorPallete westPanel = new ColorPallete(model_);
+		//westPanel.setPreferredSize(new Dimension(80, westPanel.getHeight()));
 		
 		Canvas panel = new Canvas(model_);
 		model_.setCanvas(panel);
-        panel.setPreferredSize(new Dimension(680, 480));
+        panel.setPreferredSize(new Dimension(750, 480));
         JScrollPane scroll = new JScrollPane(panel);
 		
 	    JFrame frame = new JFrame("SimpleDrawing");
 	    frame.getContentPane().setLayout(new BorderLayout());	
 	    frame.getContentPane().add(bottomPanel, BorderLayout.SOUTH);
 	    frame.getContentPane().add(topPanel, BorderLayout.NORTH);
-	    frame.getContentPane().add(westPanel, BorderLayout.WEST);
+	    //frame.getContentPane().add(westPanel, BorderLayout.WEST);
 	    frame.getContentPane().add(scroll, BorderLayout.CENTER);
 	    
 	    frame.setPreferredSize(new Dimension(800,600));

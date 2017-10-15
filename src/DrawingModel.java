@@ -13,6 +13,7 @@ public class DrawingModel implements DeleteCallback, DuplicateCallback
 	private ArrayList<IView> views = new ArrayList<IView>();
 	private int curSelectedStrokeID = -1;
 	private Canvas canvas;
+	public boolean enhanced = false;
 	
 	public void setCurSelectedStrokeID(int id_) {
 		curSelectedStrokeID = id_;

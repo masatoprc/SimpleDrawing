@@ -26,7 +26,9 @@ public class TopPanel extends JPanel implements IView {
 		model.addView(this);
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
 		this.registerControllers();
+		if (model.enhanced) {
 		this.add(duplicateButton);
+		}
 		this.add(deleteButton);
 		this.add(new JLabel("Scale:"));
 		this.add(scaleSlider);		
@@ -64,11 +66,13 @@ public class TopPanel extends JPanel implements IView {
 				model.deleteStroke();
 			}
 		});
+		if (model.enhanced) {
 		this.duplicateButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				model.duplicateStroke();
 			}
 		});
+		}
 	}
 
 	private class ScaleController implements ChangeListener {

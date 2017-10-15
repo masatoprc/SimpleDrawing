@@ -9,6 +9,7 @@ public class A2Enhanced {
 	public static void main(String[] args) {
 		
 		DrawingModel model_ = new DrawingModel();
+		model_.enhanced = true;
 		
 		BottomPanel bottomPanel = new BottomPanel(model_);
 		bottomPanel.setPreferredSize(new Dimension(bottomPanel.getWidth(), 30));
