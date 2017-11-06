@@ -1,7 +1,7 @@
 # super simple makefile
 # call it using 'make NAME=name_of_code_file_without_extension'
 # (assumes a .java extension)
-NAME = A2Basic
+NAME = SimpleDrawing
 # you may need to pass OS=win to run on windows
 OS = 
 
